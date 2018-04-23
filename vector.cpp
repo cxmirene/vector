@@ -18,27 +18,16 @@ public:
     void reserve(int recapacity);
     void push_back(T backfill);
 
-    //迭代器
-    typedef T* iterator;
-    
-    iterator insert(iterator position,T &content);
-
     T &operator [](int);
-    Vector<T> &operator=(const Vector& rhs);
 
     void show();
 private:
-    //区分开size和capacity两个不同的概念
     int vsize;
     int vcapacity;
     T *V;
 
 };
-class iterator
-{
-public:
 
-    //构造函数，用于初始化vector，这里我只实现了一种操作
 template <typename T>
 Vector<T>::Vector(int number,T fillnumber)
 {
@@ -51,29 +40,25 @@ Vector<T>::Vector(int number,T fillnumber)
     }
 }
 
-    //析构函数
 template <typename T>
 Vector<T>::~Vector()
 {
     delete[] V;
 }
 
-    //empty函数
 template <typename T>
 int Vector<T>::empty()
 {
-    if(vsize==0) return 1;
-    else return 0;
+    vsize=0;
+    return vsize;
 }
 
-    //size函数
 template <typename T>
 int Vector<T>::size()
 {
     return vsize;
 }
 
-    //reserve：用于改变vector的容量，原本不打算写这个函数，但后来发现resize和push_back都要改变vector的容量大小，就写上去了。每一次变换都要更新原本的capacity，体现在①处
 template <typename T>
 void Vector<T>::reserve(int recapacity)
 {
@@ -86,6 +71,7 @@ void Vector<T>::reserve(int recapacity)
         }
         delete[] V;
         V=newV;
+        vcapacity=recapacity;
     }
     else{
         T *newV;
@@ -98,11 +84,10 @@ void Vector<T>::reserve(int recapacity)
         V=new T[recapacity];
         assert(V!=NULL);
         V=newV;
+        vcapacity=recapacity;
     }
-    vcapacity=recapacity;	    //①
 }
 
-    //下面两个都是resize函数，两种使用方法
 template <typename T>
 void Vector<T>::resize(int renumber)
 {
@@ -131,7 +116,6 @@ void Vector<T>::resize(int renumber)
         assert(V!=NULL);
         V=newV;
     }
-    vsize=renumber;
 }
 
 template <typename T>
@@ -162,36 +146,17 @@ void Vector<T>::resize(int renumber,T refillnumber)
         assert(V!=NULL);
         V=newV;
     }
-    vsize=renumber;
 }
 
-    //push_back函数
 template <typename T>
 void Vector<T>::push_back(T backfill)
 {
     reserve(vcapacity++);
     V[vsize++]=backfill;
-}
-
-template <typename T>
-iterator Vector<T>::insert(iterator position,T &content)
-{
-    T *newV;
-    newV=new T[vcapacity++];
-    assert(newV!=NULL);
-    newV[position]=content;
-    for(int i=0,int j=0;i<vsize;i++){
-	if(j=posotion){
-	    j++;
-	}
-	newV[j]=V[i];
-    }
     vsize++;
-    return newV;
+    vcapacity++;
 }
-    
 
-    //[]重载（我目前对[]的重载了解的不是很清楚，还不是很明白这样一个重载会起到什么作用，c++ plus的书上也没怎么介绍，于是就上网搜了一下，大部分体现的判断是否越界的一个作用，就照本宣科了一下。。。
 template <typename T>
 T &Vector<T>::operator[](int i)
 {
@@ -202,24 +167,6 @@ T &Vector<T>::operator[](int i)
     return V[i];
 }
 
-    //=重载，因为之前有好多地方都要进行vector更新的步骤，就写了个赋值运算符的重载，并且参考了一下这个教程：https://www.cnblogs.com/zpcdbky/p/5027481.html
-template <typename T>
-Vector<T> &Vector<T>::operator=(const Vector &rhs)
-{
-    if(this !=&rhs){
-	delete [] V;
-	vsize=rhs.vsize;
-	vcapacity=rhs.vcapacity;
-	V=new T[vcapacity];
-	assert(V!=NULL);
-	for(int i=0;i<vsize;i++){
-	    V[i]=rhs.V[i];
-	}
-    }
-    return *this;
-}
-
-    //一个输出函数（单纯为了方便）
 template <typename T>
 void Vector<T>::show()
 {
@@ -232,27 +179,8 @@ int main()
 {
     int t;
     Vector<int> v(5,9);
-    Vector<int>::iterator It;
-    cout<<"number one:";
-    v.show();
     v.push_back(1);
-    cout<<"number two:";
-    v.show();
     v.resize(8);
-    cout<<"number three:";
     v.show();
-    v.resize(4);
-    cout<<"number four:";
-    v.show();
-    v.empty();
-    cout<<"number five:";
-    v.show();
-    v.resize(6,1);
-    cout<<"number six:";
-    v.show();
-    v.insert(1,2;
-    cout<<"number seven:";
-    v.show();
-    cout<<v.size()<<endl;
     return 0;
 }
