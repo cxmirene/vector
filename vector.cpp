@@ -17,6 +17,7 @@ public:
     void resize(int renumber,T refillnumber);
     void reserve(int recapacity);
     void push_back(T backfill);
+    void insert(int posotion,T content);
 
     T &operator [](int);
 
@@ -158,6 +159,26 @@ void Vector<T>::push_back(T backfill)
 }
 
 template <typename T>
+void Vector<T>::insert(int position,T content)
+{
+    T *newV;
+    newV=new T[vcapacity++];
+    assert(newV!=NULL);
+    newV[position]=content;
+    for(int i=0,j=0;i<vsize;i++){
+	if(j=posotion){
+	    j++;
+	}
+	newV[j]=V[i];
+    }
+    vsize++;
+    delete[] V;
+    V=new T[vcapacity++];
+    assert(V!=NULL);
+    V=newV;
+}
+
+template <typename T>
 T &Vector<T>::operator[](int i)
 {
     if(i>=vsize)
@@ -179,8 +200,26 @@ int main()
 {
     int t;
     Vector<int> v(5,9);
-    v.push_back(1);
-    v.resize(8);
+    cout<<"number one:";
     v.show();
-    return 0;
+    v.push_back(1);
+    cout<<"number two:";
+    v.show();
+    v.resize(8);
+    cout<<"number three:";
+    v.show();
+    v.resize(4);
+    cout<<"number four:";
+    v.show();
+    v.empty();
+    cout<<"number five:";
+    v.show();
+    v.resize(6,1);
+    cout<<"number six:";
+    v.show();
+    v.insert(2,1);
+    cout<<"number seven:";
+    v.show();
+    cout<<v.size()<<endl;
+    return 0
 }
