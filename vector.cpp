@@ -166,7 +166,7 @@ void Vector<T>::insert(int position,T content)
     assert(newV!=NULL);
     newV[position]=content;
     for(int i=0,j=0;i<vsize;i++){
-	if(j=posotion){
+	if(j=position){
 	    j++;
 	}
 	newV[j]=V[i];
@@ -211,15 +211,15 @@ int main()
     v.resize(4);
     cout<<"number four:";
     v.show();
-    v.empty();
+    v.resize(6,1);
     cout<<"number five:";
     v.show();
-    v.resize(6,1);
+    v.insert(2,1);
     cout<<"number six:";
     v.show();
-    v.insert(2,1);
+    v.empty();
     cout<<"number seven:";
     v.show();
     cout<<v.size()<<endl;
-    return 0
+    return 0;
 }
