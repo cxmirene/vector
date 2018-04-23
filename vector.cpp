@@ -17,18 +17,21 @@ public:
     void resize(int renumber,T refillnumber);
     void reserve(int recapacity);
     void push_back(T backfill);
-    void insert(int posotion,T content);
+    void insert(int posotion,T content);	//insert本来应该用iterator，但我编译了几次都出现了错误（之前的代码说明里有），所以就先写了个普通的函数实现以下它的功能。。。那个错误的代码还在修改中。。
 
     T &operator [](int);
+    T &operator =(const Vector &rhs);
 
     void show();
 private:
+    //区分开size和capacity两个不同的概念
     int vsize;
     int vcapacity;
     T *V;
 
 };
 
+    //构造函数，用于初始化vector，这里我只实现了一种操作
 template <typename T>
 Vector<T>::Vector(int number,T fillnumber)
 {
@@ -41,12 +44,14 @@ Vector<T>::Vector(int number,T fillnumber)
     }
 }
 
+    //析构函数
 template <typename T>
 Vector<T>::~Vector()
 {
     delete[] V;
 }
 
+    //empty函数
 template <typename T>
 int Vector<T>::empty()
 {
@@ -54,12 +59,14 @@ int Vector<T>::empty()
     else return 0;
 }
 
+    //size函数
 template <typename T>
 int Vector<T>::size()
 {
     return vsize;
 }
 
+    //reserve：用于改变vector的容量，原本不打算写这个函数，但后来发现resize和push_back都要改变vector的容量大小，就写上去了。每一次变换都要更新原本的capacity，体现在①处
 template <typename T>
 void Vector<T>::reserve(int recapacity)
 {
@@ -85,9 +92,10 @@ void Vector<T>::reserve(int recapacity)
         assert(V!=NULL);
         V=newV;
     }
-    vcapacity=recapacity;
+    vcapacity=recapacity;		//①
 }
 
+    //下面两个都是resize函数，两种使用方法
 template <typename T>
 void Vector<T>::resize(int renumber)
 {
@@ -152,6 +160,7 @@ void Vector<T>::resize(int renumber,T refillnumber)
     vcapacity++;
 }
 
+    //push_back函数
 template <typename T>
 void Vector<T>::push_back(T backfill)
 {
@@ -159,6 +168,8 @@ void Vector<T>::push_back(T backfill)
     V[vsize++]=backfill;
 }
 
+    
+    //insert函数
 template <typename T>
 void Vector<T>::insert(int position,T content)
 {
@@ -181,6 +192,7 @@ void Vector<T>::insert(int position,T content)
     V=newV;
 }
 
+    //[]重载（我目前对[]的重载了解的不是很清楚，还不是很明白这样一个重载会起到什么作用，c++ plus的书上也没怎么介绍，于是就上网搜了一下，大部分体现的判断是否越界的一个作用，就照本宣科了一下。。。
 template <typename T>
 T &Vector<T>::operator[](int i)
 {
@@ -191,6 +203,23 @@ T &Vector<T>::operator[](int i)
     return V[i];
 }
 
+    //=重载，因为之前有好多地方都要进行vector更新的步骤，就尝试写了个赋值运算符的重载，中途参考了一下这个教程：https://www.cnblogs.com/zpcdbky/p/5027481.html
+template <typename T>
+T &Vector<T>::operator=(const Vector &rhs)
+{
+    if(this !=&rhs){
+	delete [] V;
+	vsize=rhs.vsize;
+	vcapacity=rhs.vcapacity;
+	V=new T[vcapacity];
+	assert(V!=NULL);
+	for(int i=0;i<vsize;i++){
+	    V[i]=rhs.V[i];
+	}
+    }
+    return *this;
+}
+    //一个输出函数（单纯为了方便）
 template <typename T>
 void Vector<T>::show()
 {
