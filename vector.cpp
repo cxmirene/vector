@@ -18,6 +18,11 @@ public:
     void reserve(int recapacity);
     void push_back(T backfill);
 
+    //迭代器
+    typedef T* iterator;
+    
+    iterator insert(iterator position,T &content);
+
     T &operator [](int);
     Vector<T> &operator=(const Vector& rhs);
 
@@ -29,6 +34,9 @@ private:
     T *V;
 
 };
+class iterator
+{
+public:
 
     //构造函数，用于初始化vector，这里我只实现了一种操作
 template <typename T>
@@ -165,6 +173,24 @@ void Vector<T>::push_back(T backfill)
     V[vsize++]=backfill;
 }
 
+template <typename T>
+iterator Vector<T>::insert(iterator position,T &content)
+{
+    T *newV;
+    newV=new T[vcapacity++];
+    assert(newV!=NULL);
+    newV[position]=content;
+    for(int i=0,int j=0;i<vsize;i++){
+	if(j=posotion){
+	    j++;
+	}
+	newV[j]=V[i];
+    }
+    vsize++;
+    return newV;
+}
+    
+
     //[]重载（我目前对[]的重载了解的不是很清楚，还不是很明白这样一个重载会起到什么作用，c++ plus的书上也没怎么介绍，于是就上网搜了一下，大部分体现的判断是否越界的一个作用，就照本宣科了一下。。。
 template <typename T>
 T &Vector<T>::operator[](int i)
@@ -206,6 +232,7 @@ int main()
 {
     int t;
     Vector<int> v(5,9);
+    Vector<int>::iterator It;
     cout<<"number one:";
     v.show();
     v.push_back(1);
@@ -222,6 +249,9 @@ int main()
     v.show();
     v.resize(6,1);
     cout<<"number six:";
+    v.show();
+    v.insert(1,2;
+    cout<<"number seven:";
     v.show();
     cout<<v.size()<<endl;
     return 0;
