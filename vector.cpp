@@ -50,8 +50,8 @@ Vector<T>::~Vector()
 template <typename T>
 int Vector<T>::empty()
 {
-    vsize=0;
-    return vsize;
+    if(vsize==0) return 1;
+    else return 0;
 }
 
 template <typename T>
@@ -72,7 +72,6 @@ void Vector<T>::reserve(int recapacity)
         }
         delete[] V;
         V=newV;
-        vcapacity=recapacity;
     }
     else{
         T *newV;
@@ -85,8 +84,8 @@ void Vector<T>::reserve(int recapacity)
         V=new T[recapacity];
         assert(V!=NULL);
         V=newV;
-        vcapacity=recapacity;
     }
+    vcapacity=recapacity;
 }
 
 template <typename T>
@@ -117,6 +116,8 @@ void Vector<T>::resize(int renumber)
         assert(V!=NULL);
         V=newV;
     }
+    vsize=renumber;
+    vcapacity++;
 }
 
 template <typename T>
@@ -147,6 +148,8 @@ void Vector<T>::resize(int renumber,T refillnumber)
         assert(V!=NULL);
         V=newV;
     }
+    vsize=renumber;
+    vcapacity++;
 }
 
 template <typename T>
@@ -154,22 +157,22 @@ void Vector<T>::push_back(T backfill)
 {
     reserve(vcapacity++);
     V[vsize++]=backfill;
-    vsize++;
-    vcapacity++;
 }
 
 template <typename T>
 void Vector<T>::insert(int position,T content)
 {
     T *newV;
+    int i,j=0;
     newV=new T[vcapacity++];
     assert(newV!=NULL);
     newV[position]=content;
-    for(int i=0,j=0;i<vsize;i++){
-	if(j=position){
+    for(i=0;i<vsize;i++){
+	if(j==position){
 	    j++;
 	}
 	newV[j]=V[i];
+	j++;
     }
     vsize++;
     delete[] V;
